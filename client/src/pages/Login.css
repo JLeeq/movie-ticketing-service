@@ -1,19 +1,19 @@
 .login-container {
-  min-height: 100vh;
-  display: flex;
+  min-height: 100vh; # 화면 높이 100%
+  display: flex; # 요소를 가로, 세로 중앙 정렬
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  justify-content: center; # 요소를 가로, 세로 중앙 정렬
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); # 그라데이션 배경
   padding: 2rem;
 }
 
 .login-box {
-  background: white;
+  background: white; # 배경색 흰색
   padding: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+  border-radius: 12px; # 모서리 둥글게
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); # 그림자
+  width: 100%; # 너비 100%
+  max-width: 400px; # 최대 너비 400px
 }
 
 .login-box h1 {

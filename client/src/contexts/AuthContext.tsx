@@ -1,9 +1,9 @@
-'''
+/*
 로그인 기능에서 인증 Context 생성
 
 - 전역 인증 상태 관리 (user, session, loading)
 signIn, signUp, signOut 함수 제공
-'''
+*/
 
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
