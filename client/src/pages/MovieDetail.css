@@ -23,7 +23,6 @@
 }
 
 .date-selection {
-  flex: 1;
   margin-bottom: 2rem;
 }
 
@@ -59,30 +58,67 @@
   color: white;
 }
 
-.booking-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  padding: 1.5rem;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
+.schedule-selection {
+  margin-bottom: 2rem;
 }
 
-.booking-button {
+.schedule-selection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.selected-date-info {
+  font-size: 1.2rem;
+  color: #667eea;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.schedules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.schedule-item {
+  background-color: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.schedule-item:hover {
+  border-color: #667eea;
+  background-color: #f0f0ff;
+}
+
+.schedule-item.selected {
+  border-color: #667eea;
   background-color: #667eea;
   color: white;
-  border: none;
-  padding: 1rem 3rem;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.booking-button:hover {
-  background-color: #5568d3;
+.schedule-theater {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.schedule-time {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.schedule-seats {
+  font-size: 1rem;
+  color: #666;
+}
+
+.schedule-item.selected .schedule-seats {
+  color: rgba(255, 255, 255, 0.9);
 }
 

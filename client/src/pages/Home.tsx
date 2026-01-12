@@ -25,15 +25,14 @@ const Home = () => {
     }
   };
 
-  // 임시 더미 데이터
   useEffect(() => {
     const dummyMovies: Movie[] = [
-      { id: 1, title: '영화 1', poster: '', description: '영화 1 설명' },
-      { id: 2, title: '영화 2', poster: '', description: '영화 2 설명' },
-      { id: 3, title: '영화 3', poster: '', description: '영화 3 설명' },
-      { id: 4, title: '영화 4', poster: '', description: '영화 4 설명' },
-      { id: 5, title: '영화 5', poster: '', description: '영화 5 설명' },
-      { id: 6, title: '영화 6', poster: '', description: '영화 6 설명' },
+      { id: 1, title: 'Avatar: Fire and Ash', poster: '', description: '2025 ‧ Action/Fantasy ‧ 3h 17m' },
+      { id: 2, title: 'Zootopia 2', poster: '', description: '2025 ‧ Family/Comedy ‧ 1h 50m' },
+      { id: 3, title: 'Stranger Things Season 5', poster: '', description: '2016 ‧ Horror ‧ 5 seasons' },
+      { id: 4, title: 'Avengers: Doomsday', poster: '', description: '2026 ‧ Sci-fi/Action' },
+      { id: 5, title: 'Spider-Man: Brand New Day', poster: '', description: '2026 ‧ Sci-fi/Action' },
+      { id: 6, title: 'The SpongeBob Movie: Search for SquarePants', poster: '', description: '2025 ‧ Family/Adventure ‧ 1h 28m' },
       { id: 7, title: '영화 7', poster: '', description: '영화 7 설명' },
       { id: 8, title: '영화 8', poster: '', description: '영화 8 설명' },
     ];

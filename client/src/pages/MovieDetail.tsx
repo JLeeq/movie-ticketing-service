@@ -9,11 +9,20 @@ interface Movie {
   poster: string;
 }
 
+interface Schedule {
+  id: number;
+  theater: string;
+  time: string;
+  availableSeats: number;
+}
+
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
 
   useEffect(() => {
     // TODO: API에서 영화 정보 가져오기
@@ -26,12 +35,28 @@ const MovieDetail = () => {
     setMovie(dummyMovie);
   }, [id]);
 
-  const handleBookingClick = () => {
+  useEffect(() => {
+    // 날짜가 선택되면 스케줄 데이터 로드
     if (selectedDate) {
-      navigate(`/movie/${id}/schedule?date=${selectedDate}`);
+      // TODO: API에서 상영 스케줄 가져오기
+      const dummySchedules: Schedule[] = [
+        { id: 1, theater: '1관', time: '10:00', availableSeats: 45 },
+        { id: 2, theater: '2관', time: '13:30', availableSeats: 32 },
+        { id: 3, theater: '3관', time: '16:00', availableSeats: 50 },
+        { id: 4, theater: '1관', time: '19:00', availableSeats: 28 },
+        { id: 5, theater: '2관', time: '21:30', availableSeats: 40 },
+      ];
+      setSchedules(dummySchedules);
+      setSelectedSchedule(null);
     } else {
-      alert('날짜를 선택해주세요.');
+      setSchedules([]);
+      setSelectedSchedule(null);
     }
+  }, [selectedDate, id]);
+
+  const handleScheduleClick = (scheduleId: number) => {
+    setSelectedSchedule(scheduleId);
+    navigate(`/movie/${id}/seat?date=${selectedDate}&scheduleId=${scheduleId}`);
   };
 
   const getDateOptions = () => {
@@ -43,6 +68,14 @@ const MovieDetail = () => {
       dates.push(date.toISOString().split('T')[0]);
     }
     return dates;
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const dayName = dayNames[date.getDay()];
+    return `${date.getMonth() + 1}/${date.getDate()}(${dayName})`;
   };
 
   if (!movie) return <div>Loading...</div>;
@@ -59,7 +92,7 @@ const MovieDetail = () => {
         <div className="date-buttons">
           {getDateOptions().map((date) => {
             const dateObj = new Date(date);
-            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             const dayName = dayNames[dateObj.getDay()];
             const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}(${dayName})`;
 
@@ -76,11 +109,29 @@ const MovieDetail = () => {
         </div>
       </div>
 
-      <div className="booking-footer">
-        <button className="booking-button" onClick={handleBookingClick}>
-          예매
-        </button>
-      </div>
+      {selectedDate && (
+        <div className="schedule-selection">
+          <h2>상영 스케줄</h2>
+          <div className="selected-date-info">
+            선택한 날짜: {formatDate(selectedDate)}
+          </div>
+          <div className="schedules-list">
+            {schedules.map((schedule) => (
+              <div
+                key={schedule.id}
+                className={`schedule-item ${selectedSchedule === schedule.id ? 'selected' : ''}`}
+                onClick={() => handleScheduleClick(schedule.id)}
+              >
+                <div className="schedule-theater">{schedule.theater}</div>
+                <div className="schedule-time">{schedule.time}</div>
+                <div className="schedule-seats">
+                  잔여좌석: {schedule.availableSeats}석
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

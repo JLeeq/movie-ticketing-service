@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config(); // .env 파일의 값이 process.env.PORT 로 들어옵니다.
 
 const app = express();
 const PORT = process.env.PORT || 5000;

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import LoginBanner from '../components/LoginBanner';
 import './SeatSelection.css';
 
 interface Seat {
@@ -13,9 +15,11 @@ const SeatSelection = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user } = useAuth();
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [seats, setSeats] = useState<Seat[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showLoginBanner, setShowLoginBanner] = useState(false);
   const seatPrice = 12000;
 
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -72,6 +76,13 @@ const SeatSelection = () => {
       alert('좌석을 선택해주세요.');
       return;
     }
+    
+    // 로그인 체크
+    if (!user) {
+      setShowLoginBanner(true);
+      return;
+    }
+    
     setShowPaymentModal(true);
   };
 
@@ -156,6 +167,8 @@ const SeatSelection = () => {
           </div>
         </div>
       )}
+
+      <LoginBanner isOpen={showLoginBanner} onClose={() => setShowLoginBanner(false)} />
     </div>
   );
 };
