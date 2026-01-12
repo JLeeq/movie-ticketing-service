@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Home.css';
 
 interface Movie {
@@ -13,6 +14,16 @@ const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
 
   // 임시 더미 데이터
   useEffect(() => {
@@ -46,7 +57,23 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">영화 예매</h1>
+      <div className="home-header">
+        <h1 className="home-title">영화 예매</h1>
+        <div className="auth-section">
+          {user ? (
+            <div className="user-info">
+              <span className="user-email">{user.email}</span>
+              <button className="logout-button" onClick={handleLogout}>
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button className="login-button" onClick={() => navigate('/login')}>
+              로그인
+            </button>
+          )}
+        </div>
+      </div>
       <div className="movies-section">
         <button
           className="nav-button nav-button-left"
