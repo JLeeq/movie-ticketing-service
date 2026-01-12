@@ -1,0 +1,164 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import './SeatSelection.css';
+
+interface Seat {
+  row: string;
+  number: number;
+  isSelected: boolean;
+  isBooked: boolean;
+}
+
+const SeatSelection = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
+  const [seats, setSeats] = useState<Seat[]>([]);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const seatPrice = 12000;
+
+  const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  const seatsPerRow = 8;
+
+  useEffect(() => {
+    // 좌석 초기화 (A1-G8)
+    const initialSeats: Seat[] = [];
+    rows.forEach((row) => {
+      for (let num = 1; num <= seatsPerRow; num++) {
+        initialSeats.push({
+          row,
+          number: num,
+          isSelected: false,
+          isBooked: false, // TODO: API에서 예매된 좌석 정보 가져오기
+        });
+      }
+    });
+    setSeats(initialSeats);
+  }, []);
+
+  const handleSeatClick = (row: string, number: number) => {
+    setSeats((prevSeats) => {
+      const updatedSeats = prevSeats.map((seat) => {
+        if (seat.row === row && seat.number === number) {
+          if (seat.isBooked) return seat;
+          const newSelectionState = !seat.isSelected;
+          
+          // selectedSeats 업데이트
+          setSelectedSeats((prev) => {
+            const seatKey = `${row}${number}`;
+            if (newSelectionState) {
+              // 선택됨 - 추가
+              if (!prev.find((s) => `${s.row}${s.number}` === seatKey)) {
+                return [...prev, { ...seat, isSelected: true }];
+              }
+            } else {
+              // 선택 해제됨 - 제거
+              return prev.filter((s) => `${s.row}${s.number}` !== seatKey);
+            }
+            return prev;
+          });
+          
+          return { ...seat, isSelected: newSelectionState };
+        }
+        return seat;
+      });
+      return updatedSeats;
+    });
+  };
+
+  const handleBuy = () => {
+    if (selectedSeats.length === 0) {
+      alert('좌석을 선택해주세요.');
+      return;
+    }
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentConfirm = () => {
+    // TODO: 결제 API 호출
+    setShowPaymentModal(false);
+    navigate('/');
+  };
+
+  const totalPrice = selectedSeats.length * seatPrice;
+
+  return (
+    <div className="seat-selection-container">
+      <h1>좌석 선택</h1>
+
+      <div className="screen-indicator">SCREEN</div>
+
+      <div className="seats-grid">
+        {rows.map((row) => (
+          <div key={row} className="seat-row">
+            <div className="row-label">{row}</div>
+            {Array.from({ length: seatsPerRow }, (_, i) => {
+              const seatNumber = i + 1;
+              const seat = seats.find((s) => s.row === row && s.number === seatNumber);
+              const isSelected = seat?.isSelected || false;
+              const isBooked = seat?.isBooked || false;
+
+              return (
+                <button
+                  key={seatNumber}
+                  className={`seat ${isSelected ? 'selected' : ''} ${isBooked ? 'booked' : ''}`}
+                  onClick={() => handleSeatClick(row, seatNumber)}
+                  disabled={isBooked}
+                >
+                  {seatNumber}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <div className="seat-legend">
+        <div className="legend-item">
+          <div className="legend-seat available"></div>
+          <span>예약 가능</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-seat selected"></div>
+          <span>선택</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-seat booked"></div>
+          <span>예약 완료</span>
+        </div>
+      </div>
+
+      <div className="booking-footer">
+        <div className="selected-info">
+          <div className="selected-seats">
+            선택한 좌석: {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ') || '없음'}
+          </div>
+          <div className="total-price">총 가격: {totalPrice.toLocaleString()}원</div>
+        </div>
+        <button className="buy-button" onClick={handleBuy}>
+          Buy
+        </button>
+      </div>
+
+      {showPaymentModal && (
+        <div className="modal-overlay" onClick={() => setShowPaymentModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>결제 완료</h2>
+            <p>예매가 완료되었습니다!</p>
+            <div className="payment-details">
+              <p>선택한 좌석: {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ')}</p>
+              <p>총 금액: {totalPrice.toLocaleString()}원</p>
+            </div>
+            <button className="modal-button" onClick={handlePaymentConfirm}>
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SeatSelection;
+
