@@ -8,8 +8,8 @@ import Login from './pages/Login';
 
 function App() {
   return (
-    <AuthProvider> //앱 전체에서 인증 상태를 쓰기 위해 이걸 감쌈.
-      <BrowserRouter> //주소창(URL)을 기준으로 페이지를 바꿔줌
+    <AuthProvider> {/* 앱 전체에서 인증 상태를 쓰기 위해 이걸 감쌈. */}
+      <BrowserRouter> {/* 주소창(URL)을 기준으로 페이지를 바꿔줌 */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route element={<Layout />}>
