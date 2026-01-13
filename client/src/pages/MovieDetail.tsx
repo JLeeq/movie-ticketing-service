@@ -7,7 +7,22 @@ interface Movie {
   title: string;
   description: string;
   poster: string;
+  detailImage?: string;
 }
+
+const getDetailImagePath = (movieId: number): string => {
+  const imageMap: Record<number, string> = {
+    1: '/images/posters/movie_1_2.webp',
+    2: '/images/posters/movie_2_2.png',
+    3: '/images/posters/movie_3_2.jpg',
+    4: '/images/posters/movie_4_2.jpeg',
+    5: '/images/posters/movie_5_2.jpg',
+    6: '/images/posters/movie_6_2.webp',
+    7: '/images/posters/movie_7_2.jpg',
+    8: '/images/posters/movie_8_2.jpg',
+  };
+  return imageMap[movieId] || '';
+};
 
 interface Schedule {
   id: number;
@@ -80,8 +95,15 @@ const MovieDetail = () => {
 
   if (!movie) return <div>Loading...</div>;
 
+  const detailImage = getDetailImagePath(movie.id);
+
   return (
     <div className="movie-detail-container">
+      {detailImage && (
+        <div className="movie-detail-image">
+          <img src={detailImage} alt={movie.title} />
+        </div>
+      )}
       <div className="movie-info">
         <h1>{movie.title}</h1>
         <p>{movie.description}</p>
