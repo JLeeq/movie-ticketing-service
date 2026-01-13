@@ -29,6 +29,7 @@ interface Schedule {
   theater: string;
   time: string;
   availableSeats: number;
+  totalSeats: number;
 }
 
 const MovieDetail = () => {
@@ -55,11 +56,11 @@ const MovieDetail = () => {
     if (selectedDate) {
       // TODO: API에서 상영 스케줄 가져오기
       const dummySchedules: Schedule[] = [
-        { id: 1, theater: '1관', time: '10:00', availableSeats: 45 },
-        { id: 2, theater: '2관', time: '13:30', availableSeats: 32 },
-        { id: 3, theater: '3관', time: '16:00', availableSeats: 50 },
-        { id: 4, theater: '1관', time: '19:00', availableSeats: 28 },
-        { id: 5, theater: '2관', time: '21:30', availableSeats: 40 },
+        { id: 1, theater: '1관', time: '10:00', availableSeats: 45, totalSeats: 56 },
+        { id: 2, theater: '2관', time: '13:30', availableSeats: 32, totalSeats: 56 },
+        { id: 3, theater: '3관', time: '16:00', availableSeats: 50, totalSeats: 56 },
+        { id: 4, theater: '1관', time: '19:00', availableSeats: 28, totalSeats: 56 },
+        { id: 5, theater: '2관', time: '21:30', availableSeats: 40, totalSeats: 56 },
       ];
       setSchedules(dummySchedules);
       setSelectedSchedule(null);
@@ -147,7 +148,7 @@ const MovieDetail = () => {
                 <div className="schedule-theater">{schedule.theater}</div>
                 <div className="schedule-time">{schedule.time}</div>
                 <div className="schedule-seats">
-                  잔여좌석: {schedule.availableSeats}석
+                  {schedule.availableSeats}/{schedule.totalSeats}
                 </div>
               </div>
             ))}
