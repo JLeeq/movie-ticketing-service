@@ -7,14 +7,14 @@ export interface Movie {
 }
 
 export const movies: Movie[] = [
-  { id: 1, title: 'Avatar: Fire and Ash', poster: '/images/posters/movie_1_1.jpg', description: '2025 ‧ Action/Fantasy ‧ 3h 17m', releaseDate: '2025-03-15' },
-  { id: 2, title: 'Zootopia 2', poster: '/images/posters/movie_2_1.webp', description: '2025 ‧ Family/Comedy ‧ 1h 50m', releaseDate: '2025-04-20' },
-  { id: 3, title: 'Stranger Things Season 5', poster: '/images/posters/movie_3_1.jpg', description: '2016 ‧ Horror ‧ 5 seasons', releaseDate: '2024-01-01' },
-  { id: 4, title: 'Avengers: Doomsday', poster: '/images/posters/movie_4_1.jpg', description: '2026 ‧ Sci-fi/Action', releaseDate: '2026-05-01' },
-  { id: 5, title: 'Spider-Man: Brand New Day', poster: '/images/posters/movie_5_1.jpg', description: '2026 ‧ Sci-fi/Action', releaseDate: '2026-07-15' },
-  { id: 6, title: 'The SpongeBob Movie: Search for SquarePants', poster: '/images/posters/movie_6_1.jpg', description: '2025 ‧ Family/Adventure ‧ 1h 28m', releaseDate: '2025-02-10' },
-  { id: 7, title: '영화 7', poster: '/images/posters/movie_7_1.webp', description: '영화 7 설명', releaseDate: '2025-06-01' },
-  { id: 8, title: '영화 8', poster: '/images/posters/movie_8_1.jpg', description: '영화 8 설명', releaseDate: '2025-08-20' },
+  { id: 1, title: 'Avatar: Fire and Ash', poster: '/images/posters/movie_1_1.jpg', description: '2025 ‧ Action/Fantasy ‧ 3h 17m', releaseDate: '2025-12-17' },
+  { id: 2, title: 'Zootopia 2', poster: '/images/posters/movie_2_1.webp', description: '2025 ‧ Family/Comedy ‧ 1h 50m', releaseDate: '2025-11-26' },
+  { id: 3, title: 'Spider-Man: Brand New Day', poster: '/images/posters/movie_5_1.jpg', description: '2026 ‧ Sci-fi/Action', releaseDate: '2026-07-31' },
+  { id: 4, title: 'The SpongeBob Movie: Search for SquarePants', poster: '/images/posters/movie_6_1.jpg', description: '2025 ‧ Family/Adventure ‧ 1h 28m', releaseDate: '2025-12-19' },
+  { id: 5, title: 'Stranger Things Season 5', poster: '/images/posters/movie_3_1.jpg', description: '2025 ‧ Horror ‧ 5 seasons', releaseDate: '2025-12-24' },
+  { id: 6, title: 'Wicked: For Good', poster: '/images/posters/movie_7_1.webp', description: '2025 ‧ All ‧ 2h 17m', releaseDate: '2025-11-21' },
+  { id: 7, title: 'The Devil Wears Prada 2', poster: '/images/posters/movie_8_1.jpg', description: '2026 ‧ Comedy', releaseDate: '2026-05-01' },
+  { id: 8, title: 'Avengers: Doomsday', poster: '/images/posters/movie_4_1.jpg', description: '2026 ‧ Sci-fi/Action', releaseDate: '2026-12-18' },
 ];
 
 // 개봉일이 지났는지 확인하는 함수
