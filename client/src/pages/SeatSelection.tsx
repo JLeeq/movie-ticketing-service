@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useBooking } from '../contexts/BookingContext';
+import { getMovieById } from '../data/movies';
 import LoginBanner from '../components/LoginBanner';
 import './SeatSelection.css';
 
@@ -16,6 +18,11 @@ const SeatSelection = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const { bookSeats, bookings } = useBooking();
+  const scheduleId = Number(searchParams.get('scheduleId')) || 0;
+  const date = searchParams.get('date') || '';
+  const theater = searchParams.get('theater') || 'Theater 1';
+  const time = searchParams.get('time') || '10:00';
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [seats, setSeats] = useState<Seat[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -30,16 +37,22 @@ const SeatSelection = () => {
     const initialSeats: Seat[] = [];
     rows.forEach((row) => {
       for (let num = 1; num <= seatsPerRow; num++) {
+        const seatKey = `${row}${num}`;
+        // 예매된 좌석인지 확인
+        const isBooked = bookings.some((booking) => 
+          booking.scheduleId === scheduleId && booking.seats.includes(seatKey)
+        );
+        
         initialSeats.push({
           row,
           number: num,
           isSelected: false,
-          isBooked: false, // TODO: API에서 예매된 좌석 정보 가져오기
+          isBooked,
         });
       }
     });
     setSeats(initialSeats);
-  }, []);
+  }, [scheduleId, bookings]);
 
   const handleSeatClick = (row: string, number: number) => {
     setSeats((prevSeats) => {
@@ -86,8 +99,37 @@ const SeatSelection = () => {
     setShowPaymentModal(true);
   };
 
-  const handlePaymentConfirm = () => {
-    // TODO: 결제 API 호출
+  const handlePaymentConfirm = async () => {
+    if (user && selectedSeats.length > 0 && scheduleId > 0) {
+      // 좌석 예매 처리
+      const seatStrings = selectedSeats.map((seat) => `${seat.row}${seat.number}`);
+      const totalPrice = selectedSeats.length * seatPrice;
+      
+      // 영화 정보 가져오기
+      const movie = getMovieById(Number(id));
+      const movieTitle = movie?.title || `Movie ${id}`;
+      
+      // 스케줄 정보는 URL 파라미터나 기본값 사용
+      // TODO: 실제로는 API에서 스케줄 정보를 가져와야 함
+      const scheduleTheater = theater;
+      const scheduleTime = time;
+      
+      bookSeats(scheduleId, Number(id), date, seatStrings, user.id, movieTitle, scheduleTheater, scheduleTime, totalPrice);
+      
+      // 선택한 좌석을 예매 완료 상태로 변경
+      setSeats((prevSeats) => {
+        return prevSeats.map((seat) => {
+          const seatKey = `${seat.row}${seat.number}`;
+          if (seatStrings.includes(seatKey)) {
+            return { ...seat, isBooked: true, isSelected: false };
+          }
+          return seat;
+        });
+      });
+      
+      setSelectedSeats([]);
+    }
+    
     setShowPaymentModal(false);
     navigate('/');
   };

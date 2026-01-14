@@ -1,16 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useBooking, type Booking } from '../contexts/BookingContext';
 import './BookingHistoryModal.css';
-
-interface Booking {
-  id: number;
-  movieTitle: string;
-  date: string;
-  theater: string;
-  time: string;
-  seats: string[];
-  totalPrice: number;
-}
 
 interface BookingHistoryModalProps {
   isOpen: boolean;
@@ -19,34 +10,15 @@ interface BookingHistoryModalProps {
 
 const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
   const { user } = useAuth();
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const { getUserBookings, cancelBooking } = useBooking();
+  
+  const bookings = user ? getUserBookings(user.id) : [];
 
-  useEffect(() => {
-    if (isOpen && user) {
-      // TODO: API에서 예매 내역 가져오기
-      const dummyBookings: Booking[] = [
-        {
-          id: 1,
-          movieTitle: '영화 1',
-          date: '2024-01-15',
-          theater: '1관',
-          time: '10:00',
-          seats: ['A1', 'A2'],
-          totalPrice: 24000,
-        },
-        {
-          id: 2,
-          movieTitle: '영화 2',
-          date: '2024-01-16',
-          theater: '2관',
-          time: '13:30',
-          seats: ['B5'],
-          totalPrice: 12000,
-        },
-      ];
-      setBookings(dummyBookings);
+  const handleCancel = (bookingId: string) => {
+    if (window.confirm('Are you sure you want to cancel this booking?')) {
+      cancelBooking(bookingId);
     }
-  }, [isOpen, user]);
+  };
 
   if (!isOpen) return null;
 
@@ -72,7 +44,7 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
             <div className="bookings-list">
               {bookings.map((booking) => (
                 <div key={booking.id} className="booking-item">
-                  <div className="booking-movie-title">{booking.movieTitle}</div>
+                  <div className="booking-movie-title">{booking.movieTitle || `Movie ${booking.movieId}`}</div>
                   <div className="booking-details">
                     <div className="booking-detail-row">
                       <span>Date:</span>
@@ -80,11 +52,11 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
                     </div>
                     <div className="booking-detail-row">
                       <span>Theater:</span>
-                      <span>{booking.theater}</span>
+                      <span>{booking.theater || 'Theater'}</span>
                     </div>
                     <div className="booking-detail-row">
                       <span>Time:</span>
-                      <span>{booking.time}</span>
+                      <span>{booking.time || 'TBA'}</span>
                     </div>
                     <div className="booking-detail-row">
                       <span>Seats:</span>
@@ -92,9 +64,15 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
                     </div>
                     <div className="booking-detail-row booking-total">
                       <span>Total:</span>
-                      <span>₩{booking.totalPrice.toLocaleString()}</span>
+                      <span>₩{booking.totalPrice?.toLocaleString() || '0'}</span>
                     </div>
                   </div>
+                  <button 
+                    className="cancel-booking-button"
+                    onClick={() => handleCancel(booking.id)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               ))}
             </div>

@@ -67,6 +67,7 @@
   border-radius: 8px;
   padding: 1rem;
   background-color: #f9f9f9;
+  position: relative;
 }
 
 .booking-movie-title {
@@ -108,5 +109,22 @@
 .booking-total span:last-child {
   color: #667eea;
   font-size: 1.1rem;
+}
+
+.cancel-booking-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.cancel-booking-button:hover {
+  background-color: #c82333;
 }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMovieById } from '../data/movies';
+import { useBooking } from '../contexts/BookingContext';
 import type { Movie } from '../data/movies';
 import './MovieDetail.css';
 
@@ -33,6 +34,7 @@ interface Schedule {
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { getBookedSeatsCount } = useBooking();
   const [movie, setMovie] = useState<MovieWithDetailImage | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -50,24 +52,40 @@ const MovieDetail = () => {
     // 날짜가 선택되면 스케줄 데이터 로드
     if (selectedDate) {
       // TODO: API에서 상영 스케줄 가져오기
-      const dummySchedules: Schedule[] = [
-        { id: 1, theater: '1관', time: '10:00', availableSeats: 56, totalSeats: 56 },
-        { id: 2, theater: '2관', time: '13:30', availableSeats: 56, totalSeats: 56 },
-        { id: 3, theater: '3관', time: '16:00', availableSeats: 56, totalSeats: 56 },
-        { id: 4, theater: '1관', time: '19:00', availableSeats: 56, totalSeats: 56 },
-        { id: 5, theater: '2관', time: '21:30', availableSeats: 56, totalSeats: 56 },
+      const totalSeats = 56;
+      const baseSchedules: Schedule[] = [
+        { id: 1, theater: '1관', time: '10:00', availableSeats: totalSeats, totalSeats },
+        { id: 2, theater: '2관', time: '13:30', availableSeats: totalSeats, totalSeats },
+        { id: 3, theater: '3관', time: '16:00', availableSeats: totalSeats, totalSeats },
+        { id: 4, theater: '1관', time: '19:00', availableSeats: totalSeats, totalSeats },
+        { id: 5, theater: '2관', time: '21:30', availableSeats: totalSeats, totalSeats },
       ];
-      setSchedules(dummySchedules);
+      
+      // 예매된 좌석 수를 반영하여 availableSeats 계산
+      const updatedSchedules = baseSchedules.map((schedule) => {
+        const bookedCount = getBookedSeatsCount(schedule.id);
+        return {
+          ...schedule,
+          availableSeats: Math.max(0, schedule.totalSeats - bookedCount),
+        };
+      });
+      
+      setSchedules(updatedSchedules);
       setSelectedSchedule(null);
     } else {
       setSchedules([]);
       setSelectedSchedule(null);
     }
-  }, [selectedDate, id]);
+  }, [selectedDate, id, getBookedSeatsCount]);
 
   const handleScheduleClick = (scheduleId: number) => {
     setSelectedSchedule(scheduleId);
-    navigate(`/movie/${id}/seat?date=${selectedDate}&scheduleId=${scheduleId}`);
+    const schedule = schedules.find((s) => s.id === scheduleId);
+    if (schedule) {
+      navigate(`/movie/${id}/seat?date=${selectedDate}&scheduleId=${scheduleId}&theater=${encodeURIComponent(schedule.theater)}&time=${encodeURIComponent(schedule.time)}`);
+    } else {
+      navigate(`/movie/${id}/seat?date=${selectedDate}&scheduleId=${scheduleId}`);
+    }
   };
 
   const getDateOptions = () => {
