@@ -80,13 +80,13 @@
 }
 
 .date-button:hover {
-  border-color: #667eea;
+  border-color: var(--button-primary);
   background-color: #333;
 }
 
 .date-button.selected {
-  border-color: #667eea;
-  background-color: #667eea;
+  border-color: var(--button-primary);
+  background-color: var(--button-primary);
   color: white;
 }
 
@@ -102,7 +102,7 @@
 
 .selected-date-info {
   font-size: 1.2rem;
-  color: #667eea;
+  color: var(--button-primary);
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -127,13 +127,13 @@
 }
 
 .schedule-item:hover {
-  border-color: #667eea;
+  border-color: var(--button-primary);
   background-color: #333;
 }
 
 .schedule-item.selected {
-  border-color: #667eea;
-  background-color: #667eea;
+  border-color: var(--button-primary);
+  background-color: var(--button-primary);
   color: white;
 }
 
@@ -188,7 +188,7 @@
 .days-number {
   font-size: 4rem;
   font-weight: bold;
-  color: #667eea;
+  color: var(--button-primary);
   line-height: 1;
 }
 

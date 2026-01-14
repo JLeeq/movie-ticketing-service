@@ -62,7 +62,7 @@
 
 .no-auth-message .login-button {
   padding: 0.75rem 2rem;
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -73,7 +73,7 @@
 }
 
 .no-auth-message .login-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
 }
 
 .bookings-list {
@@ -127,7 +127,7 @@
 }
 
 .booking-total span:last-child {
-  color: #667eea;
+  color: var(--button-primary);
   font-size: 1.1rem;
 }
 

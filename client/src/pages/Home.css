@@ -22,9 +22,16 @@
   gap: 0.75rem;
 }
 
+.user-greeting {
+  font-size: 1rem;
+  color: white;
+  font-weight: 400;
+  margin-right: 0.5rem;
+}
+
 .my-page-button,
 .auth-button {
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -39,7 +46,7 @@
 
 .my-page-button:hover,
 .auth-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -99,7 +106,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--button-primary) 0%, #764ba2 100%);
   color: white;
   font-weight: bold;
 }
@@ -119,7 +126,7 @@
 }
 
 .nav-button {
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   width: 40px;
@@ -135,7 +142,7 @@
 }
 
 .nav-button:hover:not(:disabled) {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
 }
 
 .nav-button:disabled {

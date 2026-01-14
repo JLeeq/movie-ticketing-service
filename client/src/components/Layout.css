@@ -6,7 +6,7 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -20,7 +20,7 @@
 }
 
 .booking-history-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }

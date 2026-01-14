@@ -61,14 +61,14 @@
 }
 
 .seat:hover:not(:disabled) {
-  border-color: #667eea;
-  background-color: #f0f0ff;
+  border-color: var(--button-primary);
+  background-color: rgba(220, 53, 69, 0.1);
   transform: scale(1.05);
 }
 
 .seat.selected {
-  background-color: #667eea;
-  border-color: #667eea;
+  background-color: var(--button-primary);
+  border-color: var(--button-primary);
   color: white;
 }
 
@@ -105,8 +105,8 @@
 }
 
 .legend-seat.selected {
-  background-color: #667eea;
-  border-color: #667eea;
+  background-color: var(--button-primary);
+  border-color: var(--button-primary);
 }
 
 .legend-seat.booked {
@@ -141,11 +141,11 @@
 .total-price {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #667eea;
+  color: var(--button-primary);
 }
 
 .buy-button {
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   padding: 1rem 3rem;
@@ -156,7 +156,7 @@
 }
 
 .buy-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
 }
 
 .modal-overlay {
@@ -208,7 +208,7 @@
 }
 
 .modal-button {
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -220,6 +220,6 @@
 }
 
 .modal-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
 }
 

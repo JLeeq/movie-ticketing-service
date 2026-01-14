@@ -1,155 +1,180 @@
 .login-container {
-  min-height: 100vh; # 화면 높이 100%
-  display: flex; # 요소를 가로, 세로 중앙 정렬
+  min-height: 100vh; /* 화면 높이 100% */
+  display: flex; /* 요소를 가로, 세로 중앙 정렬 */
   align-items: center;
-  justify-content: center; # 요소를 가로, 세로 중앙 정렬
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); # 그라데이션 배경
+  justify-content: center; /* 요소를 가로, 세로 중앙 정렬 */
+  background: linear-gradient(135deg, var(--button-primary) 0%, #764ba2 100%); /* 그라데이션 배경
   padding: 2rem;
 }
 
 .login-box {
-  background: white; # 배경색 흰색
-  padding: 3rem;
-  border-radius: 12px; # 모서리 둥글게
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); # 그림자
-  width: 100%; # 너비 100%
-  max-width: 400px; # 최대 너비 400px
+background: white; /* 배경색 흰색 */
+    padding: 3rem;
+    border-radius: 12px; /* 모서리 둥글게 */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* 그림자 */
+    width: 100%; /* 너비 100% */
+    max-width: 400px; /* 최대 너비 400px */
 }
 
+/* 로그인 박스 제목(h1) 스타일 */
 .login-box h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
-  font-size: 2rem;
+    text-align: center;      /* 제목을 가운데 정렬 */
+    margin-bottom: 2rem;     /* 제목과 아래 요소 사이 간격 */
+    color: #333;             /* 제목 글자 색 (짙은 회색) */
+    font-size: 2rem;         /* 제목 글자 크기 */
 }
 
+/* 입력 필드 묶음(form-group) 간 간격 */
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;  /* 각 입력 그룹 사이 여백 */
 }
 
+/* 라벨(label) 스타일 */
 .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
+  display: block;         /* 라벨을 한 줄 전체 차지 */
+  margin-bottom: 0.5rem;  /* 라벨과 input 사이 간격 */
+  color: #333;             /* 라벨 글자 색 */
+  font-weight: 500;        /* 라벨 글자 두께 */
 }
 
+/* 입력창(input) 기본 스타일 */
 .form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+    width: 100%;             /* 부모 요소 너비를 꽉 채움 */
+    padding: 0.75rem;        /* 입력창 내부 여백 */
+    border: 2px solid #ddd;  /* 기본 테두리 색 */
+    border-radius: 8px;      /* 둥근 모서리 */
+    font-size: 1rem;         /* 입력 글자 크기 */
+    transition: border-color 0.2s; /* 포커스 시 테두리 색 부드럽게 변경 */
+    box-sizing: border-box;  /* padding 포함한 width 계산 */
+
+  padding: 0.75rem;        /* 입력창 내부 여백 */
+  border: 2px solid #ddd;  /* 기본 테두리 색 */
+  border-radius: 8px;      /* 둥근 모서리 */
+  font-size: 1rem;         /* 입력 글자 크기 */
+  transition: border-color 0.2s; /* 포커스 시 테두리 색 부드럽게 변경 */
+  box-sizing: border-box;  /* padding 포함한 width 계산 */
 }
 
+/* 입력창에 포커스가 갔을 때 */
 .form-group input:focus {
-  outline: none;
-  border-color: #667eea;
+  outline: none;                    /* 기본 파란 테두리 제거 */
+  border-color: var(--button-primary); /* 포커스 시 강조 색상 */
 }
 
+/* 에러 메시지 박스 */
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
+    background-color: #fee;  /* 연한 빨간 배경 */
+    color: #c33;             /* 에러 텍스트 색 */
+  padding: 0.75rem;        /* 내부 여백 */
+  border-radius: 8px;      /* 둥근 모서리 */
+  margin-bottom: 1rem;     /* 아래 요소와의 간격 */
+  text-align: center;      /* 텍스트 가운데 정렬 */
+  font-size: 0.9rem;       /* 에러 메시지 글자 크기 */
 }
 
+/* 로그인 / 회원가입 제출 버튼 */
 .submit-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-bottom: 1rem;
+  width: 100%;                     /* 버튼 너비 전체 */
+  padding: 0.75rem;                /* 버튼 내부 여백 */
+  background-color: var(--button-primary); /* 기본 버튼 색 */
+  color: white;                    /* 버튼 글자 색 */
+  border: none;                    /* 기본 테두리 제거 */
+  border-radius: 8px;              /* 둥근 버튼 */
+  font-size: 1.1rem;               /* 버튼 글자 크기 */
+  font-weight: bold;               /* 굵은 글씨 */
+  cursor: pointer;                 /* 마우스 포인터 변경 */
+  transition: background-color 0.2s; /* hover 시 색 전환 */
+  margin-bottom: 1rem;             /* 아래 요소와 간격 */
 }
 
+/* 버튼 hover 상태 (비활성화 제외) */
 .submit-button:hover:not(:disabled) {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover); /* hover 시 색상 */
 }
 
+/* 버튼 비활성화 상태 */
 .submit-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  background-color: #ccc;  /* 회색으로 비활성 표시 */
+  cursor: not-allowed;     /* 클릭 불가 커서 */
 }
 
+/* 로그인/회원가입 전환 영역 */
 .switch-mode {
-  text-align: center;
+  text-align: center;      /* 가운데 정렬 */
 }
 
+/* 로그인 ↔ 회원가입 전환 버튼 */
 .switch-button {
-  background: none;
-  border: none;
-  color: #667eea;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.9rem;
+  background: none;              /* 배경 제거 */
+  border: none;                  /* 테두리 제거 */
+  color: var(--button-primary);  /* 링크처럼 보이게 색상 */
+  cursor: pointer;               /* 클릭 가능 표시 */
+  text-decoration: underline;    /* 밑줄 */
+  font-size: 0.9rem;             /* 작은 글씨 */
 }
 
+/* 전환 버튼 hover 상태 */
 .switch-button:hover {
-  color: #5568d3;
+  color: var(--button-primary-hover); /* hover 시 색상 변경 */
 }
 
+/* 구분선(divider) 컨테이너 */
 .divider {
-  display: flex;
-  align-items: center;
+  display: flex;           /* 가로 정렬 */
+  align-items: center;     /* 세로 중앙 정렬 */
   text-align: center;
-  margin: 1.5rem 0;
+  margin: 1.5rem 0;        /* 위아래 여백 */
 }
 
+/* 구분선 왼쪽/오른쪽 라인 */
 .divider::before,
 .divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #ddd;
+  content: '';             /* 가상 요소 생성 */
+  flex: 1;                 /* 양쪽 선이 동일한 길이 */
+  border-bottom: 1px solid #ddd; /* 얇은 회색 선 */
 }
 
+/* 구분선 가운데 텍스트 */
 .divider span {
-  padding: 0 1rem;
-  color: #666;
-  font-size: 0.9rem;
+  padding: 0 1rem;         /* 텍스트 좌우 여백 */
+  color: #666;             /* 텍스트 색 */
+  font-size: 0.9rem;       /* 텍스트 크기 */
 }
 
+/* 구글 로그인 버튼 */
 .google-login-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: white;
-  color: #333;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  width: 100%;             /* 버튼 전체 너비 */
+  padding: 0.75rem;        /* 내부 여백 */
+  background-color: white; /* 흰색 배경 */
+  color: #333;             /* 글자 색 */
+  border: 2px solid #ddd;  /* 테두리 */
+  border-radius: 8px;      /* 둥근 모서리 */
+  font-size: 1rem;         /* 글자 크기 */
+  font-weight: 500;        /* 글자 두께 */
+  cursor: pointer;         /* 클릭 가능 표시 */
+  transition: all 0.2s;    /* hover 시 부드러운 변화 */
+  display: flex;           /* 아이콘 + 텍스트 정렬 */
+  align-items: center;     /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  gap: 0.75rem;            /* 아이콘과 텍스트 간격 */
+  margin-bottom: 1rem;     /* 아래 여백 */
 }
 
+/* 구글 로그인 버튼 hover */
 .google-login-button:hover:not(:disabled) {
-  border-color: #ccc;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: #ccc;      /* 테두리 색 변화 */
+  background-color: #f9f9f9; /* 배경색 변화 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 뜨는 효과 */
 }
 
+/* 구글 로그인 버튼 비활성화 */
 .google-login-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.6;            /* 흐리게 표시 */
+  cursor: not-allowed;     /* 클릭 불가 */
 }
 
+/* 구글 아이콘 크기 */
 .google-icon {
-  width: 20px;
-  height: 20px;
+  width: 20px;             /* 아이콘 너비 */
+  height: 20px;            /* 아이콘 높이 */
 }
-

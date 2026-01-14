@@ -16,7 +16,7 @@
 
 .selected-date {
   font-size: 1.2rem;
-  color: #667eea;
+  color: var(--button-primary);
   font-weight: bold;
 }
 
@@ -39,13 +39,13 @@
 }
 
 .schedule-item:hover {
-  border-color: #667eea;
-  background-color: #f0f0ff;
+  border-color: var(--button-primary);
+  background-color: rgba(220, 53, 69, 0.1);
 }
 
 .schedule-item.selected {
-  border-color: #667eea;
-  background-color: #667eea;
+  border-color: var(--button-primary);
+  background-color: var(--button-primary);
   color: white;
 }
 

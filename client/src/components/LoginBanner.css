@@ -53,12 +53,12 @@
 }
 
 .banner-login-button {
-  background-color: #667eea;
+  background-color: var(--button-primary);
   color: white;
 }
 
 .banner-login-button:hover {
-  background-color: #5568d3;
+  background-color: var(--button-primary-hover);
 }
 
 .banner-cancel-button {

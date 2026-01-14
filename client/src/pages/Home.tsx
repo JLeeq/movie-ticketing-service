@@ -42,11 +42,28 @@ const Home = () => {
     navigate(`/movie/${movieId}`);
   };
 
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    // Google 로그인 또는 사용자 메타데이터에서 이름 가져오기
+    const fullName = user.user_metadata?.full_name || user.user_metadata?.name;
+    if (fullName) return fullName;
+    // 이메일에서 @ 앞부분 사용
+    if (user.email) {
+      return user.email.split('@')[0];
+    }
+    return 'User';
+  };
+
   return (
     <div className="home-container">
       <div className="home-header">
         <h1 className="home-title">REGAL THEATER</h1>
         <div className="auth-section">
+          {user && (
+            <div className="user-greeting">
+              Hello, {getUserDisplayName()}
+            </div>
+          )}
           <button 
             className="my-page-button" 
             onClick={() => setIsBookingHistoryOpen(true)}
