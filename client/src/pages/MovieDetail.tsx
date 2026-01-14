@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMovieById, isReleased, getDaysUntilRelease } from '../data/movies';
 import { useBooking } from '../contexts/BookingContext';
+import { useLike } from '../contexts/LikeContext';
+import { useAuth } from '../contexts/AuthContext';
 import type { Movie } from '../data/movies';
 import './MovieDetail.css';
 
@@ -35,6 +37,8 @@ const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { getBookedSeatsCount } = useBooking();
+  const { toggleLike, getLikeCount, isLiked } = useLike();
+  const { user } = useAuth();
   const [movie, setMovie] = useState<MovieWithDetailImage | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -107,11 +111,27 @@ const MovieDetail = () => {
     return `${date.getMonth() + 1}/${date.getDate()}(${dayName})`;
   };
 
+  const handleLikeClick = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await toggleLike(movie!.id, user.id);
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      alert('좋아요 처리 중 오류가 발생했습니다.');
+    }
+  };
+
   if (!movie) return <div>Loading...</div>;
 
   const detailImage = getDetailImagePath(movie.id);
   const released = isReleased(movie.releaseDate);
   const daysUntilRelease = getDaysUntilRelease(movie.releaseDate);
+  const likeCount = getLikeCount(movie.id);
+  const liked = user ? isLiked(movie.id, user.id) : false;
   const formatReleaseDate = (dateString?: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -128,7 +148,26 @@ const MovieDetail = () => {
         </div>
       )}
       <div className="movie-info">
-        <h1>{movie.title}</h1>
+        <div className="movie-title-header">
+          <h1>{movie.title}</h1>
+          <button 
+            className={`like-button ${liked ? 'liked' : ''}`}
+            onClick={handleLikeClick}
+            aria-label={liked ? 'Unlike' : 'Like'}
+          >
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill={liked ? 'currentColor' : 'none'} 
+              stroke="currentColor" 
+              strokeWidth="2"
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span className="like-count">{likeCount}</span>
+          </button>
+        </div>
         <p>{movie.description}</p>
       </div>
 

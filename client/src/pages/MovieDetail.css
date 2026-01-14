@@ -40,10 +40,58 @@
   margin-bottom: 2rem;
 }
 
+.movie-title-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .movie-info h1 {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin: 0;
   color: white;
+  flex: 1;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.like-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.like-button.liked {
+  border-color: var(--button-primary);
+  color: var(--button-primary);
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.like-button.liked:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+}
+
+.like-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.like-count {
+  font-weight: 500;
+  min-width: 20px;
+  text-align: center;
 }
 
 .movie-info p {

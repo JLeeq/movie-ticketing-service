@@ -23,6 +23,34 @@
   color: white;
 }
 
+.modal-tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+  padding: 0 1.5rem;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tab-button.active {
+  color: var(--button-primary);
+  border-bottom-color: var(--button-primary);
+}
+
 .close-button {
   background: none;
   border: none;
@@ -146,5 +174,54 @@
 
 .cancel-booking-button:hover {
   background-color: #c82333;
+}
+
+.liked-movies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.liked-movie-item {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.liked-movie-item:hover {
+  border-color: var(--button-primary);
+  background-color: #333;
+}
+
+.liked-movie-poster {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.liked-movie-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.liked-movie-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.liked-movie-description {
+  font-size: 0.9rem;
+  color: #999;
 }
 
