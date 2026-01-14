@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getMovieById } from '../data/movies';
+import type { Movie } from '../data/movies';
 import './MovieDetail.css';
 
-interface Movie {
-  id: number;
-  title: string;
-  description: string;
-  poster: string;
+interface MovieWithDetailImage extends Movie {
   detailImage?: string;
 }
 
@@ -35,20 +33,17 @@ interface Schedule {
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [movie, setMovie] = useState<MovieWithDetailImage | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
 
   useEffect(() => {
     // TODO: API에서 영화 정보 가져오기
-    const dummyMovie: Movie = {
-      id: Number(id),
-      title: `영화 ${id}`,
-      description: `영화 ${id}의 상세 설명입니다.`,
-      poster: '',
-    };
-    setMovie(dummyMovie);
+    const movieData = getMovieById(Number(id));
+    if (movieData) {
+      setMovie(movieData);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -56,11 +51,11 @@ const MovieDetail = () => {
     if (selectedDate) {
       // TODO: API에서 상영 스케줄 가져오기
       const dummySchedules: Schedule[] = [
-        { id: 1, theater: '1관', time: '10:00', availableSeats: 45, totalSeats: 56 },
-        { id: 2, theater: '2관', time: '13:30', availableSeats: 32, totalSeats: 56 },
-        { id: 3, theater: '3관', time: '16:00', availableSeats: 50, totalSeats: 56 },
-        { id: 4, theater: '1관', time: '19:00', availableSeats: 28, totalSeats: 56 },
-        { id: 5, theater: '2관', time: '21:30', availableSeats: 40, totalSeats: 56 },
+        { id: 1, theater: '1관', time: '10:00', availableSeats: 56, totalSeats: 56 },
+        { id: 2, theater: '2관', time: '13:30', availableSeats: 56, totalSeats: 56 },
+        { id: 3, theater: '3관', time: '16:00', availableSeats: 56, totalSeats: 56 },
+        { id: 4, theater: '1관', time: '19:00', availableSeats: 56, totalSeats: 56 },
+        { id: 5, theater: '2관', time: '21:30', availableSeats: 56, totalSeats: 56 },
       ];
       setSchedules(dummySchedules);
       setSelectedSchedule(null);
@@ -111,7 +106,7 @@ const MovieDetail = () => {
       </div>
 
       <div className="date-selection">
-        <h2>날짜 선택</h2>
+        <h2>Date Selection</h2>
         <div className="date-buttons">
           {getDateOptions().map((date) => {
             const dateObj = new Date(date);
@@ -134,9 +129,9 @@ const MovieDetail = () => {
 
       {selectedDate && (
         <div className="schedule-selection">
-          <h2>상영 스케줄</h2>
+          <h2>Schedule</h2>
           <div className="selected-date-info">
-            선택한 날짜: {formatDate(selectedDate)}
+            Selected Date: {formatDate(selectedDate)}
           </div>
           <div className="schedules-list">
             {schedules.map((schedule) => (

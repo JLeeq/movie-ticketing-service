@@ -20,11 +20,11 @@ const ScheduleSelection = () => {
   useEffect(() => {
     // TODO: API에서 상영 스케줄 가져오기
     const dummySchedules: Schedule[] = [
-      { id: 1, theater: '1관', time: '10:00', availableSeats: 45 },
-      { id: 2, theater: '2관', time: '13:30', availableSeats: 32 },
-      { id: 3, theater: '3관', time: '16:00', availableSeats: 50 },
-      { id: 4, theater: '1관', time: '19:00', availableSeats: 28 },
-      { id: 5, theater: '2관', time: '21:30', availableSeats: 40 },
+      { id: 1, theater: '1 Theater', time: '10:00', availableSeats: 45 },
+      { id: 2, theater: '2 Theater', time: '13:30', availableSeats: 32 },
+      { id: 3, theater: '3 Theater', time: '16:00', availableSeats: 50 },
+      { id: 4, theater: '1 Theater', time: '19:00', availableSeats: 28 },
+      { id: 5, theater: '2 Theater', time: '21:30', availableSeats: 40 },
     ];
     setSchedules(dummySchedules);
   }, [id, selectedDate]);
@@ -37,7 +37,7 @@ const ScheduleSelection = () => {
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const dayName = dayNames[date.getDay()];
     return `${date.getMonth() + 1}/${date.getDate()}(${dayName})`;
   };
@@ -45,10 +45,10 @@ const ScheduleSelection = () => {
   return (
     <div className="schedule-selection-container">
       <div className="schedule-header">
-        <h1>상영 스케줄</h1>
+        <h1>Schedule</h1>
         {selectedDate && (
           <div className="selected-date">
-            선택한 날짜: {formatDate(selectedDate)}
+            Selected Date: {formatDate(selectedDate)}
           </div>
         )}
       </div>
@@ -63,7 +63,7 @@ const ScheduleSelection = () => {
             <div className="schedule-theater">{schedule.theater}</div>
             <div className="schedule-time">{schedule.time}</div>
             <div className="schedule-seats">
-              잔여좌석: {schedule.availableSeats}석
+              Remaining Seats: {schedule.availableSeats} seats
             </div>
           </div>
         ))}

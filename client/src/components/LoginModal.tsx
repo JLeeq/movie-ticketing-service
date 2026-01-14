@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import './Login.css';
+import './LoginModal.css';
 
-const Login = () => {
+interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
@@ -11,7 +15,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   
   const { signIn, signUp, signInWithGoogle } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +25,10 @@ const Login = () => {
       if (isSignUp) {
         await signUp(email, password);
         alert('Registration completed! Please check your email.');
+        onClose();
       } else {
         await signIn(email, password);
-        navigate('/');
+        onClose();
       }
     } catch (err: any) {
       setError(err.message || 'An error occurred.');
@@ -37,14 +41,18 @@ const Login = () => {
     setError(null);
     try {
       await signInWithGoogle();
+      onClose();
     } catch (err: any) {
       setError(err.message || 'An error occurred while logging in with Google.');
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="login-container">
-      <div className="login-box">
+    <div className="login-modal-overlay" onClick={onClose}>
+      <div className="login-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="login-modal-close" onClick={onClose}>✕</button>
         <h1>{isSignUp ? 'Registration' : 'Login'}</h1>
         
         <form onSubmit={handleSubmit}>
@@ -74,12 +82,12 @@ const Login = () => {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" disabled={loading} className="submit-button">
-            {loading ? 'Processing...' : isSignUp ? 'Registration' : 'Login'}
+            {loading ? 'Processing...' : isSignUp ? 'Register' : 'Login'}
           </button>
         </form>
 
         <div className="divider">
-          <span>또는</span>
+          <span>or</span>
         </div>
 
         <button
@@ -126,5 +134,5 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginModal;
 

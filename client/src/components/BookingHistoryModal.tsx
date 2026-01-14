@@ -54,7 +54,7 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="booking-history-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>예매 내역</h2>
+          <h2>Booking History</h2>
           <button className="close-button" onClick={onClose}>
             ✕
           </button>
@@ -62,11 +62,11 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
         <div className="modal-body">
           {!user ? (
             <div className="no-auth-message">
-              <p>로그인이 필요합니다.</p>
+              <p>Login required.</p>
             </div>
           ) : bookings.length === 0 ? (
             <div className="no-bookings-message">
-              <p>예매 내역이 없습니다.</p>
+              <p>No booking history.</p>
             </div>
           ) : (
             <div className="bookings-list">
@@ -75,24 +75,24 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
                   <div className="booking-movie-title">{booking.movieTitle}</div>
                   <div className="booking-details">
                     <div className="booking-detail-row">
-                      <span>날짜:</span>
+                      <span>Date:</span>
                       <span>{booking.date}</span>
                     </div>
                     <div className="booking-detail-row">
-                      <span>상영관:</span>
+                      <span>Theater:</span>
                       <span>{booking.theater}</span>
                     </div>
                     <div className="booking-detail-row">
-                      <span>시간:</span>
+                      <span>Time:</span>
                       <span>{booking.time}</span>
                     </div>
                     <div className="booking-detail-row">
-                      <span>좌석:</span>
+                      <span>Seats:</span>
                       <span>{booking.seats.join(', ')}</span>
                     </div>
                     <div className="booking-detail-row booking-total">
-                      <span>총 금액:</span>
-                      <span>{booking.totalPrice.toLocaleString()}원</span>
+                      <span>Total:</span>
+                      <span>₩{booking.totalPrice.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

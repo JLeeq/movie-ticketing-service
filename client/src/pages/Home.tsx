@@ -1,46 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useModal } from '../contexts/ModalContext';
+import { movies } from '../data/movies';
+import type { Movie } from '../data/movies';
 import './Home.css';
 
-interface Movie {
-  id: number;
-  title: string;
-  poster: string;
-  description: string;
-}
-
 const Home = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movieList, setMovieList] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { openLoginModal } = useModal();
 
   const handleLogout = async () => {
     try {
       await signOut();
-      navigate('/login');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
+      console.error('Logout failed:', error);
     }
   };
 
   useEffect(() => {
-    const dummyMovies: Movie[] = [
-      { id: 1, title: 'Avatar: Fire and Ash', poster: '/images/posters/movie_1_1.jpg', description: '2025 ‧ Action/Fantasy ‧ 3h 17m' },
-      { id: 2, title: 'Zootopia 2', poster: '/images/posters/movie_2_1.webp', description: '2025 ‧ Family/Comedy ‧ 1h 50m' },
-      { id: 3, title: 'Stranger Things Season 5', poster: '/images/posters/movie_3_1.jpg', description: '2016 ‧ Horror ‧ 5 seasons' },
-      { id: 4, title: 'Avengers: Doomsday', poster: '/images/posters/movie_4_1.jpg', description: '2026 ‧ Sci-fi/Action' },
-      { id: 5, title: 'Spider-Man: Brand New Day', poster: '/images/posters/movie_5_1.jpg', description: '2026 ‧ Sci-fi/Action' },
-      { id: 6, title: 'The SpongeBob Movie: Search for SquarePants', poster: '/images/posters/movie_6_1.jpg', description: '2025 ‧ Family/Adventure ‧ 1h 28m' },
-      { id: 7, title: '영화 7', poster: '/images/posters/movie_7_1.webp', description: '영화 7 설명' },
-      { id: 8, title: '영화 8', poster: '/images/posters/movie_8_1.jpg', description: '영화 8 설명' },
-    ];
-    setMovies(dummyMovies);
+    setMovieList(movies);
   }, []);
 
   const visibleMovies = 4;
-  const maxIndex = Math.max(0, movies.length - visibleMovies);
+  const maxIndex = Math.max(0, movieList.length - visibleMovies);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -57,18 +43,18 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-header">
-        <h1 className="home-title">영화 예매</h1>
+        <h1 className="home-title">REGAL THEATER</h1>
         <div className="auth-section">
           {user ? (
             <div className="user-info">
               <span className="user-email">{user.email}</span>
               <button className="logout-button" onClick={handleLogout}>
-                로그아웃
+                Logout
               </button>
             </div>
           ) : (
-            <button className="login-button" onClick={() => navigate('/login')}>
-              로그인
+            <button className="login-button" onClick={openLoginModal}>
+              Login
             </button>
           )}
         </div>
@@ -88,7 +74,7 @@ const Home = () => {
               transform: `translateX(-${currentIndex * (100 / visibleMovies)}%)`,
             }}
           >
-            {movies.map((movie) => (
+            {movieList.map((movie) => (
               <div
                 key={movie.id}
                 className="movie-card"

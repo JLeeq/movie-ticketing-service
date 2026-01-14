@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useModal } from '../contexts/ModalContext';
 import './LoginBanner.css';
 
 interface LoginBannerProps {
@@ -7,11 +7,11 @@ interface LoginBannerProps {
 }
 
 const LoginBanner = ({ isOpen, onClose }: LoginBannerProps) => {
-  const navigate = useNavigate();
+  const { openLoginModal } = useModal();
 
   const handleLoginClick = () => {
     onClose();
-    navigate('/login');
+    openLoginModal();
   };
 
   if (!isOpen) return null;
@@ -20,14 +20,14 @@ const LoginBanner = ({ isOpen, onClose }: LoginBannerProps) => {
     <div className="login-banner-overlay" onClick={onClose}>
       <div className="login-banner" onClick={(e) => e.stopPropagation()}>
         <div className="banner-content">
-          <h3>로그인이 필요합니다</h3>
-          <p>예매를 하려면 로그인이 필요합니다.</p>
+          <h3>Login Required</h3>
+          <p>You need to login to make a booking.</p>
           <div className="banner-buttons">
             <button className="banner-login-button" onClick={handleLoginClick}>
-              로그인하러 가기
+              Go to Login
             </button>
             <button className="banner-cancel-button" onClick={onClose}>
-              취소
+              Cancel
             </button>
           </div>
         </div>
