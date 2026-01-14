@@ -85,26 +85,12 @@
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 0.5rem;
-  position: relative;
 }
 
 .movie-poster img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.release-date-badge {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: white;
-  padding: 0.5rem;
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: 500;
 }
 
 .poster-placeholder {
@@ -122,6 +108,14 @@
   font-size: 1rem;
   text-align: center;
   margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.release-date-text {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-top: 0.25rem;
 }
 
 .nav-button {

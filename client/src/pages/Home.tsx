@@ -99,13 +99,13 @@ const Home = () => {
                     ) : (
                       <div className="poster-placeholder">{movie.title}</div>
                     )}
-                    {!released && movie.releaseDate && (
-                      <div className="release-date-badge">
-                        Release: {formatReleaseDate(movie.releaseDate)}
-                      </div>
-                    )}
                   </div>
                   <h3 className="movie-title">{movie.title}</h3>
+                  {!released && movie.releaseDate && (
+                    <div className="release-date-text">
+                      Release: {formatReleaseDate(movie.releaseDate)}
+                    </div>
+                  )}
                 </div>
               );
             })}
