@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useModal } from '../contexts/ModalContext';
-import { movies } from '../data/movies';
+import { movies, isReleased } from '../data/movies';
 import type { Movie } from '../data/movies';
 import BookingHistoryModal from '../components/BookingHistoryModal';
 import './Home.css';
@@ -79,22 +79,36 @@ const Home = () => {
               transform: `translateX(-${currentIndex * (100 / visibleMovies)}%)`,
             }}
           >
-            {movieList.map((movie) => (
-              <div
-                key={movie.id}
-                className="movie-card"
-                onClick={() => handleMovieClick(movie.id)}
-              >
-                <div className="movie-poster">
-                  {movie.poster ? (
-                    <img src={movie.poster} alt={movie.title} />
-                  ) : (
-                    <div className="poster-placeholder">{movie.title}</div>
-                  )}
+            {movieList.map((movie) => {
+              const released = isReleased(movie.releaseDate);
+              const formatReleaseDate = (dateString?: string) => {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+              };
+
+              return (
+                <div
+                  key={movie.id}
+                  className="movie-card"
+                  onClick={() => handleMovieClick(movie.id)}
+                >
+                  <div className="movie-poster">
+                    {movie.poster ? (
+                      <img src={movie.poster} alt={movie.title} />
+                    ) : (
+                      <div className="poster-placeholder">{movie.title}</div>
+                    )}
+                    {!released && movie.releaseDate && (
+                      <div className="release-date-badge">
+                        Release: {formatReleaseDate(movie.releaseDate)}
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="movie-title">{movie.title}</h3>
                 </div>
-                <h3 className="movie-title">{movie.title}</h3>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
         <button

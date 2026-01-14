@@ -101,37 +101,44 @@ const SeatSelection = () => {
 
   const handlePaymentConfirm = async () => {
     if (user && selectedSeats.length > 0 && scheduleId > 0) {
-      // 좌석 예매 처리
-      const seatStrings = selectedSeats.map((seat) => `${seat.row}${seat.number}`);
-      const totalPrice = selectedSeats.length * seatPrice;
-      
-      // 영화 정보 가져오기
-      const movie = getMovieById(Number(id));
-      const movieTitle = movie?.title || `Movie ${id}`;
-      
-      // 스케줄 정보는 URL 파라미터나 기본값 사용
-      // TODO: 실제로는 API에서 스케줄 정보를 가져와야 함
-      const scheduleTheater = theater;
-      const scheduleTime = time;
-      
-      bookSeats(scheduleId, Number(id), date, seatStrings, user.id, movieTitle, scheduleTheater, scheduleTime, totalPrice);
-      
-      // 선택한 좌석을 예매 완료 상태로 변경
-      setSeats((prevSeats) => {
-        return prevSeats.map((seat) => {
-          const seatKey = `${seat.row}${seat.number}`;
-          if (seatStrings.includes(seatKey)) {
-            return { ...seat, isBooked: true, isSelected: false };
-          }
-          return seat;
+      try {
+        // 좌석 예매 처리
+        const seatStrings = selectedSeats.map((seat) => `${seat.row}${seat.number}`);
+        const totalPrice = selectedSeats.length * seatPrice;
+        
+        // 영화 정보 가져오기
+        const movie = getMovieById(Number(id));
+        const movieTitle = movie?.title || `Movie ${id}`;
+        
+        // 스케줄 정보는 URL 파라미터나 기본값 사용
+        const scheduleTheater = theater;
+        const scheduleTime = time;
+        
+        // Supabase에 저장 (비동기)
+        await bookSeats(scheduleId, Number(id), date, seatStrings, user.id, movieTitle, scheduleTheater, scheduleTime, totalPrice);
+        
+        // 선택한 좌석을 예매 완료 상태로 변경
+        setSeats((prevSeats) => {
+          return prevSeats.map((seat) => {
+            const seatKey = `${seat.row}${seat.number}`;
+            if (seatStrings.includes(seatKey)) {
+              return { ...seat, isBooked: true, isSelected: false };
+            }
+            return seat;
+          });
         });
-      });
-      
-      setSelectedSeats([]);
+        
+        setSelectedSeats([]);
+        setShowPaymentModal(false);
+        navigate('/');
+      } catch (error) {
+        console.error('Payment failed:', error);
+        alert('예매 중 오류가 발생했습니다. 다시 시도해주세요.');
+        setShowPaymentModal(false);
+      }
+    } else {
+      setShowPaymentModal(false);
     }
-    
-    setShowPaymentModal(false);
-    navigate('/');
   };
 
   const totalPrice = selectedSeats.length * seatPrice;

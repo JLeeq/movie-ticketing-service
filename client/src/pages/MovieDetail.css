@@ -143,3 +143,66 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+.release-countdown {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.release-countdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.countdown-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #222;
+  border-radius: 12px;
+  border: 2px solid #555;
+}
+
+.countdown-days {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.days-number {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #667eea;
+  line-height: 1;
+}
+
+.days-label {
+  font-size: 1.5rem;
+  color: #aaa;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.release-date-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.release-date-text {
+  font-size: 1rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.release-date-value {
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 500;
+  margin: 0;
+}
+

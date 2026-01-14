@@ -184,12 +184,13 @@
 .modal-content h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
-  color: #667eea;
+  color: #000;
 }
 
 .modal-content p {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
+  color: #000;
 }
 
 .payment-details {
@@ -203,6 +204,7 @@
 .payment-details p {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  color: #000;
 }
 
 .modal-button {

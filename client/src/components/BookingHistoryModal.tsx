@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useBooking, type Booking } from '../contexts/BookingContext';
+import { useBooking } from '../contexts/BookingContext';
 import './BookingHistoryModal.css';
 
 interface BookingHistoryModalProps {
@@ -15,9 +14,14 @@ const BookingHistoryModal = ({ isOpen, onClose, onOpenLogin }: BookingHistoryMod
   
   const bookings = user ? getUserBookings(user.id) : [];
 
-  const handleCancel = (bookingId: string) => {
+  const handleCancel = async (bookingId: string) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
-      cancelBooking(bookingId);
+      try {
+        await cancelBooking(bookingId);
+      } catch (error) {
+        console.error('Error canceling booking:', error);
+        alert('예매 취소 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
     }
   };
 

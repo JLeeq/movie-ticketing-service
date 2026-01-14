@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMovieById } from '../data/movies';
+import { getMovieById, isReleased, getDaysUntilRelease } from '../data/movies';
 import { useBooking } from '../contexts/BookingContext';
 import type { Movie } from '../data/movies';
 import './MovieDetail.css';
@@ -14,11 +14,11 @@ const getDetailImagePath = (movieId: number): string => {
     1: '/images/posters/movie_1_2.webp',
     2: '/images/posters/movie_2_2.png',
     3: '/images/posters/movie_3_2.jpg',
-    4: '/images/posters/movie_4_2.jpeg',
+    4: '/images/posters/movie_4_2.jpg',
     5: '/images/posters/movie_5_2.jpg',
-    6: '/images/posters/movie_6_2.webp',
+    6: '/images/posters/movie_6_2.jpg',
     7: '/images/posters/movie_7_2.jpg',
-    8: '/images/posters/movie_8_2.jpg',
+    8: '/images/posters/movie_8_2.jpeg',
   };
   return imageMap[movieId] || '';
 };
@@ -54,11 +54,11 @@ const MovieDetail = () => {
       // TODO: API에서 상영 스케줄 가져오기
       const totalSeats = 56;
       const baseSchedules: Schedule[] = [
-        { id: 1, theater: '1관', time: '10:00', availableSeats: totalSeats, totalSeats },
-        { id: 2, theater: '2관', time: '13:30', availableSeats: totalSeats, totalSeats },
-        { id: 3, theater: '3관', time: '16:00', availableSeats: totalSeats, totalSeats },
-        { id: 4, theater: '1관', time: '19:00', availableSeats: totalSeats, totalSeats },
-        { id: 5, theater: '2관', time: '21:30', availableSeats: totalSeats, totalSeats },
+        { id: 1, theater: 'Theater 1', time: '10:00', availableSeats: totalSeats, totalSeats },
+        { id: 2, theater: 'Theater 2', time: '13:30', availableSeats: totalSeats, totalSeats },
+        { id: 3, theater: 'Theater 3', time: '16:00', availableSeats: totalSeats, totalSeats },
+        { id: 4, theater: 'Theater 4', time: '19:00', availableSeats: totalSeats, totalSeats },
+        { id: 5, theater: 'Theater 5', time: '21:30', availableSeats: totalSeats, totalSeats },
       ];
       
       // 예매된 좌석 수를 반영하여 availableSeats 계산
@@ -110,6 +110,15 @@ const MovieDetail = () => {
   if (!movie) return <div>Loading...</div>;
 
   const detailImage = getDetailImagePath(movie.id);
+  const released = isReleased(movie.releaseDate);
+  const daysUntilRelease = getDaysUntilRelease(movie.releaseDate);
+  const formatReleaseDate = (dateString?: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const dayName = dayNames[date.getDay()];
+    return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}. (${dayName})`;
+  };
 
   return (
     <div className="movie-detail-container">
@@ -123,48 +132,66 @@ const MovieDetail = () => {
         <p>{movie.description}</p>
       </div>
 
-      <div className="date-selection">
-        <h2>Date Selection</h2>
-        <div className="date-buttons">
-          {getDateOptions().map((date) => {
-            const dateObj = new Date(date);
-            const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-            const dayName = dayNames[dateObj.getDay()];
-            const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}(${dayName})`;
+      {released ? (
+        <>
+          <div className="date-selection">
+            <h2>Date Selection</h2>
+            <div className="date-buttons">
+              {getDateOptions().map((date) => {
+                const dateObj = new Date(date);
+                const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                const dayName = dayNames[dateObj.getDay()];
+                const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}(${dayName})`;
 
-            return (
-              <button
-                key={date}
-                className={`date-button ${selectedDate === date ? 'selected' : ''}`}
-                onClick={() => setSelectedDate(date)}
-              >
-                {formattedDate}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {selectedDate && (
-        <div className="schedule-selection">
-          <h2>Schedule</h2>
-          <div className="selected-date-info">
-            Selected Date: {formatDate(selectedDate)}
+                return (
+                  <button
+                    key={date}
+                    className={`date-button ${selectedDate === date ? 'selected' : ''}`}
+                    onClick={() => setSelectedDate(date)}
+                  >
+                    {formattedDate}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="schedules-list">
-            {schedules.map((schedule) => (
-              <div
-                key={schedule.id}
-                className={`schedule-item ${selectedSchedule === schedule.id ? 'selected' : ''}`}
-                onClick={() => handleScheduleClick(schedule.id)}
-              >
-                <div className="schedule-theater">{schedule.theater}</div>
-                <div className="schedule-time">{schedule.time}</div>
-                <div className="schedule-seats">
-                  {schedule.availableSeats}/{schedule.totalSeats}
-                </div>
+
+          {selectedDate && (
+            <div className="schedule-selection">
+              <h2>Schedule</h2>
+              <div className="selected-date-info">
+                Selected Date: {formatDate(selectedDate)}
               </div>
-            ))}
+              <div className="schedules-list">
+                {schedules.map((schedule) => (
+                  <div
+                    key={schedule.id}
+                    className={`schedule-item ${selectedSchedule === schedule.id ? 'selected' : ''}`}
+                    onClick={() => handleScheduleClick(schedule.id)}
+                  >
+                    <div className="schedule-theater">{schedule.theater}</div>
+                    <div className="schedule-time">{schedule.time}</div>
+                    <div className="schedule-seats">
+                      {schedule.availableSeats}/{schedule.totalSeats}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="release-countdown">
+          <h2>Release Countdown</h2>
+          <div className="countdown-content">
+            <div className="countdown-days">
+              <span className="days-number">{daysUntilRelease}</span>
+              <span className="days-label">DAYS</span>
+            </div>
+            <div className="release-date-info">
+              <p className="release-date-text">Release Date</p>
+              <p className="release-date-value">{formatReleaseDate(movie.releaseDate)}</p>
+            </div>
           </div>
         </div>
       )}
