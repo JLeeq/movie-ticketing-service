@@ -6,9 +6,10 @@ import './BookingHistoryModal.css';
 interface BookingHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenLogin: () => void;
 }
 
-const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
+const BookingHistoryModal = ({ isOpen, onClose, onOpenLogin }: BookingHistoryModalProps) => {
   const { user } = useAuth();
   const { getUserBookings, cancelBooking } = useBooking();
   
@@ -18,6 +19,11 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       cancelBooking(bookingId);
     }
+  };
+
+  const handleLoginClick = () => {
+    onClose();
+    onOpenLogin();
   };
 
   if (!isOpen) return null;
@@ -35,6 +41,9 @@ const BookingHistoryModal = ({ isOpen, onClose }: BookingHistoryModalProps) => {
           {!user ? (
             <div className="no-auth-message">
               <p>Login required.</p>
+              <button className="login-button" onClick={handleLoginClick}>
+                Login
+              </button>
             </div>
           ) : bookings.length === 0 ? (
             <div className="no-bookings-message">

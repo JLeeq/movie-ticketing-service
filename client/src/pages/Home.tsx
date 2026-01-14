@@ -4,11 +4,13 @@ import { useAuth } from '../contexts/AuthContext';
 import { useModal } from '../contexts/ModalContext';
 import { movies } from '../data/movies';
 import type { Movie } from '../data/movies';
+import BookingHistoryModal from '../components/BookingHistoryModal';
 import './Home.css';
 
 const Home = () => {
   const [movieList, setMovieList] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isBookingHistoryOpen, setIsBookingHistoryOpen] = useState(false);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { openLoginModal } = useModal();
@@ -45,15 +47,18 @@ const Home = () => {
       <div className="home-header">
         <h1 className="home-title">REGAL THEATER</h1>
         <div className="auth-section">
+          <button 
+            className="my-page-button" 
+            onClick={() => setIsBookingHistoryOpen(true)}
+          >
+            My Page
+          </button>
           {user ? (
-            <div className="user-info">
-              <span className="user-email">{user.email}</span>
-              <button className="logout-button" onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
+            <button className="auth-button" onClick={handleLogout}>
+              Logout
+            </button>
           ) : (
-            <button className="login-button" onClick={openLoginModal}>
+            <button className="auth-button" onClick={openLoginModal}>
               Login
             </button>
           )}
@@ -100,6 +105,14 @@ const Home = () => {
           ▶
         </button>
       </div>
+      <BookingHistoryModal
+        isOpen={isBookingHistoryOpen}
+        onClose={() => setIsBookingHistoryOpen(false)}
+        onOpenLogin={() => {
+          setIsBookingHistoryOpen(false);
+          openLoginModal();
+        }}
+      />
     </div>
   );
 };
