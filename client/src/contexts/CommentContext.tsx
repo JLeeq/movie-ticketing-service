@@ -28,14 +28,15 @@ export function CommentProvider({ children }: { children: ReactNode }) {
   // Supabase에서 모든 댓글 정보 불러오기
   useEffect(() => {
     // Supabase가 설정되지 않았으면 early return
-    if (!supabase) {
+    const sb = supabase;
+    if (!sb) {
       setLoading(false);
       return;
     }
 
     const fetchComments = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('comments')
           .select('*')
           .order('created_at', { ascending: false });
@@ -66,7 +67,7 @@ export function CommentProvider({ children }: { children: ReactNode }) {
     fetchComments();
 
     // 실시간 구독 (다른 유저의 댓글을 실시간으로 반영)
-    const subscription = supabase
+    const subscription = sb
       .channel('comments_changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'comments' },

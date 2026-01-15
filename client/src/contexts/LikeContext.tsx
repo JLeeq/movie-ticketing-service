@@ -26,14 +26,15 @@ export function LikeProvider({ children }: { children: ReactNode }) {
   // Supabase에서 모든 좋아요 정보 불러오기
   useEffect(() => {
     // Supabase가 설정되지 않았으면 early return
-    if (!supabase) {
+    const sb = supabase;
+    if (!sb) {
       setLoading(false);
       return;
     }
 
     const fetchLikes = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('likes')
           .select('*')
           .order('created_at', { ascending: false });
@@ -61,7 +62,7 @@ export function LikeProvider({ children }: { children: ReactNode }) {
     fetchLikes();
 
     // 실시간 구독 (다른 유저의 좋아요를 실시간으로 반영)
-    const subscription = supabase
+    const subscription = sb
       .channel('likes_changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'likes' },
