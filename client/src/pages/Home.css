@@ -1,7 +1,43 @@
 .home-container {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+  background-color: #000;
+}
+
+.content-wrapper {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: #000;
+}
+
+.ad-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  background-color: #000;
+  position: relative;
+}
+
+.ad-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.ad-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7), #000);
+  pointer-events: none;
 }
 
 .home-header {
@@ -24,6 +60,33 @@
 
 .search-section {
   margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-toggle-button {
+  background-color: var(--button-primary);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.search-toggle-button:hover {
+  background-color: var(--button-primary-hover);
+  transform: scale(1.05);
+}
+
+.search-toggle-button:active {
+  transform: scale(0.95);
 }
 
 .search-container {
@@ -31,7 +94,19 @@
   display: flex;
   align-items: center;
   max-width: 500px;
-  margin: 0 auto;
+  flex: 1;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .search-icon {
@@ -152,11 +227,16 @@
 .movie-card {
   flex: 0 0 25%;
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-poster-wrapper {
   cursor: pointer;
   transition: transform 0.2s;
 }
 
-.movie-card:hover {
+.movie-poster-wrapper:hover {
   transform: scale(1.05);
 }
 
@@ -198,6 +278,137 @@
   font-size: 0.85rem;
   color: #aaa;
   margin-top: 0.25rem;
+}
+
+.movie-comments {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment-form {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #222;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: var(--button-primary);
+  background-color: #333;
+}
+
+.comment-input::placeholder {
+  color: #999;
+}
+
+.comment-submit-button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: var(--button-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.comment-submit-button:hover:not(:disabled) {
+  background-color: var(--button-primary-hover);
+}
+
+.comment-submit-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.comment-login-prompt {
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.comment-login-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--button-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.comment-login-button:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comment-item {
+  padding: 0.5rem;
+  background-color: #222;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: white;
+  font-size: 0.8rem;
+}
+
+.comment-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.comment-content {
+  color: #ccc;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.85rem;
+}
+
+.no-comments {
+  text-align: center;
+  color: #999;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 .nav-button {
