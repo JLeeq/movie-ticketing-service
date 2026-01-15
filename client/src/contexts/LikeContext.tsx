@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import { requireSupabase } from '../lib/requireSupabase';
 
 export interface Like {
@@ -24,10 +25,15 @@ export function LikeProvider({ children }: { children: ReactNode }) {
 
   // Supabase에서 모든 좋아요 정보 불러오기
   useEffect(() => {
+    // Supabase가 설정되지 않았으면 early return
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     const fetchLikes = async () => {
       try {
-        const sb = requireSupabase();
-        const { data, error } = await sb
+        const { data, error } = await supabase
           .from('likes')
           .select('*')
           .order('created_at', { ascending: false });
@@ -55,35 +61,27 @@ export function LikeProvider({ children }: { children: ReactNode }) {
     fetchLikes();
 
     // 실시간 구독 (다른 유저의 좋아요를 실시간으로 반영)
-    let subscription: any = null;
-    try {
-      const sb = requireSupabase();
-      subscription = sb
-        .channel('likes_changes')
-        .on('postgres_changes', 
-          { event: '*', schema: 'public', table: 'likes' },
-          (payload) => {
-            if (payload.eventType === 'INSERT') {
-              const newLike: Like = {
-                id: payload.new.id,
-                movieId: payload.new.movie_id,
-                userId: payload.new.user_id,
-              };
-              setLikes((prev) => [...prev, newLike]);
-            } else if (payload.eventType === 'DELETE') {
-              setLikes((prev) => prev.filter((l) => l.id !== payload.old.id));
-            }
+    const subscription = supabase
+      .channel('likes_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'likes' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            const newLike: Like = {
+              id: payload.new.id,
+              movieId: payload.new.movie_id,
+              userId: payload.new.user_id,
+            };
+            setLikes((prev) => [...prev, newLike]);
+          } else if (payload.eventType === 'DELETE') {
+            setLikes((prev) => prev.filter((l) => l.id !== payload.old.id));
           }
-        )
-        .subscribe();
-    } catch (error) {
-      console.error('Error setting up subscription:', error);
-    }
+        }
+      )
+      .subscribe();
 
     return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
+      subscription.unsubscribe();
     };
   }, []);
 
