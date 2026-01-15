@@ -9,6 +9,8 @@ import './Home.css';
 
 const Home = () => {
   const [movieList, setMovieList] = useState<Movie[]>([]);
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isBookingHistoryOpen, setIsBookingHistoryOpen] = useState(false);
   const navigate = useNavigate();
@@ -25,10 +27,24 @@ const Home = () => {
 
   useEffect(() => {
     setMovieList(movies);
+    setFilteredMovies(movies);
   }, []);
 
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredMovies(movies);
+      setCurrentIndex(0);
+    } else {
+      const filtered = movies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredMovies(filtered);
+      setCurrentIndex(0);
+    }
+  }, [searchQuery]);
+
   const visibleMovies = 4;
-  const maxIndex = Math.max(0, movieList.length - visibleMovies);
+  const maxIndex = Math.max(0, filteredMovies.length - visibleMovies);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -81,6 +97,38 @@ const Home = () => {
           )}
         </div>
       </div>
+      <div className="search-section">
+        <div className="search-container">
+          <svg 
+            className="search-icon" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search movies..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              className="search-clear-button"
+              onClick={() => setSearchQuery('')}
+              aria-label="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
       <div className="movies-section">
         <button
           className="nav-button nav-button-left"
@@ -96,7 +144,12 @@ const Home = () => {
               transform: `translateX(-${currentIndex * (100 / visibleMovies)}%)`,
             }}
           >
-            {movieList.map((movie) => {
+            {filteredMovies.length === 0 ? (
+              <div className="no-results">
+                <p>No movies found matching "{searchQuery}"</p>
+              </div>
+            ) : (
+              filteredMovies.map((movie) => {
               const released = isReleased(movie.releaseDate);
               const formatReleaseDate = (dateString?: string) => {
                 if (!dateString) return '';
@@ -125,7 +178,8 @@ const Home = () => {
                   )}
                 </div>
               );
-            })}
+            })
+            )}
           </div>
         </div>
         <button

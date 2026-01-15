@@ -29,3 +29,4 @@ CREATE POLICY "Authenticated users can insert likes" ON likes
 CREATE POLICY "Users can delete own likes" ON likes
   FOR DELETE USING (auth.uid()::text = user_id);
 
+

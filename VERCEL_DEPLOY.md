@@ -52,3 +52,4 @@ https://movie-ticketing-service-8v5liqrcc-jleeqs-projects.vercel.app
 - 환경 변수 변경 후 재배포 필요
 - Production, Preview, Development 모두에 설정했는지 확인
 
+
