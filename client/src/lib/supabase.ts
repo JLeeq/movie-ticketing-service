@@ -8,7 +8,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // 환경 변수가 없으면 에러를 명확히 표시
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('⚠️ Supabase environment variables are not set!');
+  console.error(' Supabase environment variables are not set!');
   console.error('Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.');
   console.error('For Vercel: Go to Project Settings → Environment Variables');
 }
