@@ -19,3 +19,5 @@ server/dist/
 
 
 client/public/ad.mov
+*.mov
+*.mp4
