@@ -15,5 +15,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // 환경 변수가 없어도 클라이언트는 생성하되, 실제 사용 시 에러가 발생할 수 있습니다
 // 프로덕션 환경에서는 반드시 환경 변수가 설정되어야 합니다
-export const supabase = createClient(
-  );
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
