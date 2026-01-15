@@ -20,7 +20,7 @@ server/dist/
 
 client/public/ad.mov
 *.mov
-# ad_small.mp4는 Git에 포함되도록 예외 처리
-!client/public/ad_small.mp4
 # 다른 모든 .mp4 파일은 무시
 *.mp4
+# ad_small.mp4는 Git에 포함되도록 예외 처리 (패턴보다 뒤에 와야 함)
+!client/public/ad_small.mp4
