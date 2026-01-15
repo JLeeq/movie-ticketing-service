@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { requireSupabase } from '../lib/requireSupabase';
 
 export interface Booking {
   id: string;
@@ -33,7 +33,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const { data, error } = await supabase
+        const sb = requireSupabase();
+        const { data, error } = await sb
           .from('bookings')
           .select('*')
           .order('created_at', { ascending: false });
@@ -68,34 +69,42 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     fetchBookings();
 
     // 실시간 구독 (다른 유저의 예매를 실시간으로 반영)
-    const subscription = supabase
-      .channel('bookings_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'bookings' },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            const newBooking: Booking = {
-              id: payload.new.id,
-              scheduleId: payload.new.schedule_id,
-              movieId: payload.new.movie_id,
-              date: payload.new.date,
-              seats: payload.new.seats,
-              userId: payload.new.user_id,
-              movieTitle: payload.new.movie_title,
-              theater: payload.new.theater,
-              time: payload.new.time,
-              totalPrice: payload.new.total_price,
-            };
-            setBookings((prev) => [...prev, newBooking]);
-          } else if (payload.eventType === 'DELETE') {
-            setBookings((prev) => prev.filter((b) => b.id !== payload.old.id));
+    let subscription: any = null;
+    try {
+      const sb = requireSupabase();
+      subscription = sb
+        .channel('bookings_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'bookings' },
+          (payload) => {
+            if (payload.eventType === 'INSERT') {
+              const newBooking: Booking = {
+                id: payload.new.id,
+                scheduleId: payload.new.schedule_id,
+                movieId: payload.new.movie_id,
+                date: payload.new.date,
+                seats: payload.new.seats,
+                userId: payload.new.user_id,
+                movieTitle: payload.new.movie_title,
+                theater: payload.new.theater,
+                time: payload.new.time,
+                totalPrice: payload.new.total_price,
+              };
+              setBookings((prev) => [...prev, newBooking]);
+            } else if (payload.eventType === 'DELETE') {
+              setBookings((prev) => prev.filter((b) => b.id !== payload.old.id));
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe();
+    } catch (error) {
+      console.error('Error setting up subscription:', error);
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
@@ -111,7 +120,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     totalPrice?: number
   ) => {
     try {
-      const { data, error } = await supabase
+      const sb = requireSupabase();
+      const { data, error } = await sb
         .from('bookings')
         .insert({
           schedule_id: scheduleId,
@@ -155,7 +165,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
 
   const cancelBooking = useCallback(async (bookingId: string) => {
     try {
-      const { error } = await supabase
+      const sb = requireSupabase();
+      const { error } = await sb
         .from('bookings')
         .delete()
         .eq('id', bookingId);

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { requireSupabase } from '../lib/requireSupabase';
 
 export interface Like {
   id: string;
@@ -26,7 +26,8 @@ export function LikeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchLikes = async () => {
       try {
-        const { data, error } = await supabase
+        const sb = requireSupabase();
+        const { data, error } = await sb
           .from('likes')
           .select('*')
           .order('created_at', { ascending: false });
@@ -54,32 +55,41 @@ export function LikeProvider({ children }: { children: ReactNode }) {
     fetchLikes();
 
     // 실시간 구독 (다른 유저의 좋아요를 실시간으로 반영)
-    const subscription = supabase
-      .channel('likes_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'likes' },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            const newLike: Like = {
-              id: payload.new.id,
-              movieId: payload.new.movie_id,
-              userId: payload.new.user_id,
-            };
-            setLikes((prev) => [...prev, newLike]);
-          } else if (payload.eventType === 'DELETE') {
-            setLikes((prev) => prev.filter((l) => l.id !== payload.old.id));
+    let subscription: any = null;
+    try {
+      const sb = requireSupabase();
+      subscription = sb
+        .channel('likes_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'likes' },
+          (payload) => {
+            if (payload.eventType === 'INSERT') {
+              const newLike: Like = {
+                id: payload.new.id,
+                movieId: payload.new.movie_id,
+                userId: payload.new.user_id,
+              };
+              setLikes((prev) => [...prev, newLike]);
+            } else if (payload.eventType === 'DELETE') {
+              setLikes((prev) => prev.filter((l) => l.id !== payload.old.id));
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe();
+    } catch (error) {
+      console.error('Error setting up subscription:', error);
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
   const toggleLike = useCallback(async (movieId: number, userId: string) => {
     try {
+      const sb = requireSupabase();
       // 이미 좋아요했는지 확인
       const existingLike = likes.find(
         (like) => like.movieId === movieId && like.userId === userId
@@ -87,7 +97,7 @@ export function LikeProvider({ children }: { children: ReactNode }) {
 
       if (existingLike) {
         // 좋아요 취소
-        const { error } = await supabase
+        const { error } = await sb
           .from('likes')
           .delete()
           .eq('id', existingLike.id);
@@ -100,7 +110,7 @@ export function LikeProvider({ children }: { children: ReactNode }) {
         setLikes((prev) => prev.filter((l) => l.id !== existingLike.id));
       } else {
         // 좋아요 추가
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('likes')
           .insert({
             movie_id: movieId,

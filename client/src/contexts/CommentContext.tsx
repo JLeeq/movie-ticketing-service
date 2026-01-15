@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { requireSupabase } from '../lib/requireSupabase';
 
 export interface Comment {
   id: string;
@@ -28,7 +28,8 @@ export function CommentProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const { data, error } = await supabase
+        const sb = requireSupabase();
+        const { data, error } = await sb
           .from('comments')
           .select('*')
           .order('created_at', { ascending: false });
@@ -59,36 +60,45 @@ export function CommentProvider({ children }: { children: ReactNode }) {
     fetchComments();
 
     // 실시간 구독 (다른 유저의 댓글을 실시간으로 반영)
-    const subscription = supabase
-      .channel('comments_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'comments' },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            const newComment: Comment = {
-              id: payload.new.id,
-              movieId: payload.new.movie_id,
-              userId: payload.new.user_id,
-              userName: payload.new.user_name,
-              content: payload.new.content,
-              createdAt: payload.new.created_at,
-            };
-            setComments((prev) => [newComment, ...prev]);
-          } else if (payload.eventType === 'DELETE') {
-            setComments((prev) => prev.filter((c) => c.id !== payload.old.id));
+    let subscription: any = null;
+    try {
+      const sb = requireSupabase();
+      subscription = sb
+        .channel('comments_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'comments' },
+          (payload) => {
+            if (payload.eventType === 'INSERT') {
+              const newComment: Comment = {
+                id: payload.new.id,
+                movieId: payload.new.movie_id,
+                userId: payload.new.user_id,
+                userName: payload.new.user_name,
+                content: payload.new.content,
+                createdAt: payload.new.created_at,
+              };
+              setComments((prev) => [newComment, ...prev]);
+            } else if (payload.eventType === 'DELETE') {
+              setComments((prev) => prev.filter((c) => c.id !== payload.old.id));
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe();
+    } catch (error) {
+      console.error('Error setting up subscription:', error);
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
   const addComment = useCallback(async (movieId: number, userId: string, userName: string, content: string) => {
     try {
-      const { data, error } = await supabase
+      const sb = requireSupabase();
+      const { data, error } = await sb
         .from('comments')
         .insert({
           movie_id: movieId,
@@ -123,7 +133,8 @@ export function CommentProvider({ children }: { children: ReactNode }) {
 
   const deleteComment = useCallback(async (commentId: string) => {
     try {
-      const { error } = await supabase
+      const sb = requireSupabase();
+      const { error } = await sb
         .from('comments')
         .delete()
         .eq('id', commentId);
