@@ -135,7 +135,7 @@ const Home = () => {
           <video
             ref={videoRef}
             className="ad-video"
-            src="/ad.mov"
+            src="/ad_small.mp4"
             autoPlay
             loop
             playsInline
