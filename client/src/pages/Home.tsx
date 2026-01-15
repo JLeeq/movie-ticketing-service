@@ -299,14 +299,11 @@ const Home = () => {
                       </div>
                     )}
                     <div className="comments-list">
-                      {comments.length === 0 ? (
-                        <p className="no-comments">No comments yet</p>
-                      ) : (
+                      {comments.length > 0 && (
                         comments.map((comment) => (
                           <div key={comment.id} className="comment-item">
                             <div className="comment-header">
                               <span className="comment-author">{comment.userName || 'Anonymous'}</span>
-                              <span className="comment-date">{formatCommentDate(comment.createdAt)}</span>
                             </div>
                             <div className="comment-content">{comment.content}</div>
                           </div>
